@@ -1,96 +1,120 @@
 const yeniGorev = document.querySelector('.input-gorev');
-const yeniGorevEkleBtn = document.querySelector('.btn-gorev-ekle')
-const gorevListesi = document.querySelector('.gorev-listesi')
+const yeniGorevEkleBtn = document.querySelector('.btn-gorev-ekle');
+const gorevListesi = document.querySelector('.gorev-listesi');
 
 yeniGorevEkleBtn.addEventListener('click', gorevEkle);
-gorevListesi.addEventListener('click', gorevSil);
-document.addEventListener('DOMContentLoaded',localStorageOku)
-function gorevSil(e) {
+gorevListesi.addEventListener('click', gorevSilTamamla);
+document.addEventListener('DOMContentLoaded', localStorageOku);
+
+
+function gorevSilTamamla(e) {
     const tiklanilanEleman = e.target;
 
     if (tiklanilanEleman.classList.contains('gorev-btn-tamamlandi')) {
-        console.log("check");
+       
         tiklanilanEleman.parentElement.classList.toggle('gorev-tamamlandi');
     }
     if (tiklanilanEleman.classList.contains('gorev-btn-sil')) {
-
-        tiklanilanEleman.parentElement.classList.toggle('kaybol');
-
-        tiklanilanEleman.parentElement.addEventListener('transitionend', function () {
-            tiklanilanEleman.parentElement.remove();
-        })
+        
+        if (confirm('Emin misiniz')) {
+            tiklanilanEleman.parentElement.classList.toggle('kaybol');
+            const silinecekGorev = tiklanilanEleman.parentElement.children[0].innerText;
+            
+            localStorageSil(silinecekGorev);
+    
+            tiklanilanEleman.parentElement.addEventListener('transitionend', function () {
+                tiklanilanEleman.parentElement.remove();
+            });
+        }
+        
+       
+    
     }
 }
+
 
 function gorevEkle(e) {
     e.preventDefault();
-    gorevItemOlustur(yeniGorev.value);
- //localstorage
 
- localStorageKaydet(yeniGorev.value);
- yeniGorev.value = '';
+    if (yeniGorev.value.length > 0) {
+        gorevItemOlustur(yeniGorev.value);
+        //localstoragea kaydet
+        localStorageKaydet(yeniGorev.value);
+        yeniGorev.value = '';
+    } else {
+        alert('Boş görev tanımı olmaz');
+    }
+    
+}
 
+function localStorageArrayeDonustur() {
+    let gorevler;
 
+    if (localStorage.getItem('gorevler') === null) {
+        gorevler = [];
+    } else {
+        gorevler = JSON.parse(localStorage.getItem('gorevler'));
+    }
+
+    return gorevler;
 }
 
 function localStorageKaydet(yeniGorev) {
-    let gorevler;
-
-    if (localStorage.getItem('gorevler') === null) {
-        gorevler = [];
-    } else {
-        gorevler = JSON.parse(localStorage.getItem('gorevler'))
-    }
+    let gorevler = localStorageArrayeDonustur();
     gorevler.push(yeniGorev);
-    localStorage.setItem('gorevler', JSON.stringify(gorevler))
-
-
+    localStorage.setItem('gorevler', JSON.stringify(gorevler));
 }
+
 function localStorageOku() {
-    let gorevler;
+    let gorevler = localStorageArrayeDonustur();
 
-    if (localStorage.getItem('gorevler') === null) {
-        gorevler = [];
-    } else {
-        gorevler = JSON.parse(localStorage.getItem('gorevler'))
-    }
-    gorevler.foreach(function (gorev) {
+    gorevler.forEach(function (gorev) {
         gorevItemOlustur(gorev);
-    })
-
+    });
 }
+
 function gorevItemOlustur(gorev) {
+     //div olusturma
+     const gorevDiv = document.createElement('div');
+     gorevDiv.classList.add('gorev-item');
+     
+     //li olusturma
+     const gorevLi = document.createElement('li');
+     gorevLi.classList.add('gorev-tanim');
+     gorevLi.innerText = gorev;
+     gorevDiv.appendChild(gorevLi);
+ 
+     //tamamlandı butonu ekle
+     const gorevTamamBtn = document.createElement('button');
+     gorevTamamBtn.classList.add('gorev-btn');
+     gorevTamamBtn.classList.add('gorev-btn-tamamlandi');
+     gorevTamamBtn.innerHTML = '<i class="far fa-check-square"></i>';
+     gorevDiv.appendChild(gorevTamamBtn);
+ 
+     //tamamlandı butonu ekle
+     const gorevSilBtn = document.createElement('button');
+     gorevSilBtn.classList.add('gorev-btn');
+     gorevSilBtn.classList.add('gorev-btn-sil');
+     gorevSilBtn.innerHTML = '<i class="far fa-trash-alt"></i>';
+     gorevDiv.appendChild(gorevSilBtn);
+ 
+ 
+    
+     
+ 
+     //ul'ye olusturdugumuz divi ekleyelim
+     gorevListesi.appendChild(gorevDiv);
+}
 
-    // DİV
+function localStorageSil(gorev) {
+    let gorevler = localStorageArrayeDonustur();
 
-    const div = document.createElement('div');
-    div.classList.add('gorev-item')
+    //splice ile item sil
+    const silinecekElemanIndex = gorevler.indexOf(gorev);
+    console.log(silinecekElemanIndex);
+    gorevler.splice(silinecekElemanIndex, 1);
 
-    // Li
+    localStorage.setItem('gorevler', JSON.stringify(gorevler));
 
-    const li = document.createElement('li');
-    li.classList.add('gorev-tanim')
-    li.innerText = gorev;
-    div.appendChild(li);
-
-    //  btn
-    const tmmBtn = document.createElement('button')
-    tmmBtn.classList.add('gorev-btn')
-    tmmBtn.classList.add('gorev-btn-tamamlandi')
-    tmmBtn.innerHTML = '<i class="far fa-check-square"></i>'
-
-    div.appendChild(tmmBtn)
-   
-    //
-    const silBtn = document.createElement('button')
-    silBtn.classList.add('gorev-btn')
-    silBtn.classList.add('gorev-btn-sil')
-    silBtn.innerHTML = '<i class="far fa-trash-alt"></i>'
-
-    div.appendChild(silBtn)
-
-
-    // ulye ekleme
-
-    gorevListesi.appendChild(div)
+    
 }
