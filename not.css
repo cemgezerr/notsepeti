@@ -1,0 +1,91 @@
+:root{
+    --main-color:blue;
+    --main-color-light:rgba(0, 0, 255, 0.466);
+    --accent-color:rgb(247, 101, 4);
+    --accent-color-light:rgba(247, 101, 4, 0.507);
+}
+ *{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+ }
+
+body{font-family: 'Belanosima', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    background-image: linear-gradient(to bottom right, var(--main-color), var(--accent-color));
+    background-repeat: no-repeat;
+    min-height: 100vh;
+
+}
+.main-title{
+    font-size: 4rem;
+     
+}
+.header , .gorev-form{
+    min-height: 20vh;
+    margin: .5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-item{
+    padding: .5rem;
+    font-size: 1.5rem;
+    border: none;
+    background-color: white;
+    outline: none;
+}
+.btn-gorev-ekle{
+    color:var(--accent-color);
+    cursor:pointer;
+}
+.btn-gorev-ekle:hover{
+    color:white;
+    background-color: var(--accent-color);
+}
+.gorev-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.gorev-listesi{
+    list-style: none;
+    min-width: 40%;
+
+
+}
+.gorev-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: .5rem;
+    font-size: 1.2rem;
+    background-color: white;
+    transition: .5s ease-in-out;
+}
+.gorev-tanim{
+    flex: 1;
+    padding: 0.2rem;
+}
+.gorev-btn{
+    background-color:var(--accent-color);
+    outline: none;
+    border: none;
+    font-size: 1.2rem;
+    padding: .5rem;
+
+}
+.gorev-btn-sil{
+    background-color: red;
+}
+.gorev-tamamlandi{
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+.far{
+    pointer-events: none;
+}
+.kaybol{
+    transform: scale(0);
+}
